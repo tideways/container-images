@@ -1,5 +1,7 @@
 FROM debian:bookworm-slim
 
+LABEL org.opencontainers.image.source="https://github.com/tideways/container-images"
+
 RUN set -eux; \
 	groupadd -r tideways; \
 	useradd -r -g tideways tideways
