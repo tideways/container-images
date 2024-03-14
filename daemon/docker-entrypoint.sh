@@ -2,6 +2,12 @@
 
 set -e
 
+# Check if the first argument starts with a hyphen
+# and prepend the binary name.
+if [ "${1#-}" != "$1" ]; then
+	set -- tideways-daemon "$@"
+fi
+
 if [ "$#" -eq 1 ] && [ "$1" = "tideways-daemon" ]; then
 	TIDEWAYS_DAEMON_EXTRA=
 
