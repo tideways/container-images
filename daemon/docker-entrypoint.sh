@@ -8,9 +8,10 @@ if [ "${1#-}" != "$1" ]; then
 	set -- tideways-daemon "$@"
 fi
 
-if [ "$#" -eq 1 ] && [ "$1" = "tideways-daemon" ]; then
-	TIDEWAYS_DAEMON_EXTRA=
+if [ "$1" = "tideways-daemon" ]; then
+	shift # "tideways-daemon"
 
+	TIDEWAYS_DAEMON_EXTRA=
 	if [ -f /etc/default/tideways-daemon ]; then
 		source /etc/default/tideways-daemon
 	fi
@@ -22,7 +23,17 @@ if [ "$#" -eq 1 ] && [ "$1" = "tideways-daemon" ]; then
 		hostname=--hostname=tideways-daemon
 	fi
 
-	set -- tideways-daemon --address="[::]:9135" $hostname $TIDEWAYS_DAEMON_EXTRA
+	# In case of duplicate arguments, the last argument wins.
+	#
+	# 1. --address and $hostname specify useful defaults for use within a
+	#    container.
+	# 2. Next add $TIDEWAYS_DAEMON_EXTRA coming from
+	#    /etc/default/tideways-daemon.
+	# 3. Any command line arguments win.
+	set -- tideways-daemon \
+		--address="[::]:9135" $hostname \
+		$TIDEWAYS_DAEMON_EXTRA \
+		"$@"
 fi
 
 exec "$@"
