@@ -11,7 +11,8 @@ fi
 if [ "$1" = "tideways-daemon" ]; then
 	shift # "tideways-daemon"
 
-	TIDEWAYS_SOURCE=official-image
+	export TIDEWAYS_SOURCE=official-image
+
 	TIDEWAYS_DAEMON_EXTRA=
 	if [ -f /etc/default/tideways-daemon ]; then
 		source /etc/default/tideways-daemon
