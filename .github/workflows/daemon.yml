@@ -10,6 +10,8 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
+  attestations: write
 
 env:
   organization: tideways
@@ -38,8 +40,16 @@ jobs:
         run: echo "version=$(awk '$1 == "ENV" && $2 == "TIDEWAYS_DAEMON_VERSION"{print $3}' Dockerfile)" >> $GITHUB_OUTPUT
 
       - uses: docker/build-push-action@v5
+        id: build
         with:
           context: ./${{ env.image }}/
           push: true
           tags: ghcr.io/${{ env.organization }}/${{ env.image }}:latest,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}
           platforms: linux/amd64,linux/arm64
+
+      - uses: actions/attest-build-provenance@v1
+        id: attest
+        with:
+          subject-name: ghcr.io/${{ env.organization }}/${{ env.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
