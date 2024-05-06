@@ -20,7 +20,7 @@ COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-ENV TIDEWAYS_DAEMON_VERSION 1.8.44
+ENV TIDEWAYS_DAEMON_VERSION 1.8.46
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
