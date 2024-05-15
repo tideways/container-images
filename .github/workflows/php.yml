@@ -1,0 +1,94 @@
+name: PHP Extension
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 12 * * 3'
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+env:
+  organization: tideways
+  image: php
+
+jobs:
+  debian:
+    name: Debian
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v4
+
+      - name: Extract version from Dockerfile
+        id: extract_version
+        working-directory: ./${{ env.image }}/
+        run: echo "version=$(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' Dockerfile)" >> $GITHUB_OUTPUT
+
+      - uses: docker/build-push-action@v5
+        id: build
+        with:
+          context: ./${{ env.image }}/
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ghcr.io/${{ env.organization }}/${{ env.image }}:latest,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}
+          platforms: linux/amd64,linux/arm64
+
+      - uses: actions/attest-build-provenance@v1
+        if: ${{ github.event_name != 'pull_request' }}
+        id: attest
+        with:
+          subject-name: ghcr.io/${{ env.organization }}/${{ env.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
+
+  alpine:
+    name: Alpine
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/setup-qemu-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/checkout@v4
+
+      - name: Extract version from Dockerfile
+        id: extract_version
+        working-directory: ./${{ env.image }}/
+        run: echo "version=$(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' Dockerfile)" >> $GITHUB_OUTPUT
+
+      - uses: docker/build-push-action@v5
+        id: build
+        with:
+          context: ./${{ env.image }}/alpine/
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ghcr.io/${{ env.organization }}/${{ env.image }}:alpine,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}-alpine
+          platforms: linux/amd64,linux/arm64
+
+      - uses: actions/attest-build-provenance@v1
+        if: ${{ github.event_name != 'pull_request' }}
+        id: attest
+        with:
+          subject-name: ghcr.io/${{ env.organization }}/${{ env.image }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+          push-to-registry: true
