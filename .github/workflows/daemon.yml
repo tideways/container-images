@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
   schedule:
     - cron: '0 12 * * 3'
 
@@ -43,11 +44,12 @@ jobs:
         id: build
         with:
           context: ./${{ env.image }}/
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ env.organization }}/${{ env.image }}:latest,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}
           platforms: linux/amd64,linux/arm64
 
       - uses: actions/attest-build-provenance@v1
+        if: ${{ github.event_name != 'pull_request' }}
         id: attest
         with:
           subject-name: ghcr.io/${{ env.organization }}/${{ env.image }}
