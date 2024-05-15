@@ -3,10 +3,6 @@ FROM debian:bookworm-slim
 LABEL org.opencontainers.image.source="https://github.com/tideways/container-images"
 
 RUN set -eux; \
-	groupadd -r tideways; \
-	useradd -r -g tideways tideways
-
-RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
 	apt-get update; \
 	apt-get install -y --no-install-recommends \
@@ -15,6 +11,10 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 COPY tideways.asc /usr/share/keyrings/tideways.asc
+
+RUN set -eux; \
+	groupadd -r tideways; \
+	useradd -r -g tideways tideways
 
 COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 
