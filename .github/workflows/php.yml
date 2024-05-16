@@ -47,6 +47,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ env.organization }}/${{ env.image }}:latest,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}
           platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - uses: actions/attest-build-provenance@v1
         if: ${{ github.event_name != 'pull_request' }}
@@ -84,6 +86,8 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ghcr.io/${{ env.organization }}/${{ env.image }}:alpine,ghcr.io/${{ env.organization }}/${{ env.image }}:${{ steps.extract_version.outputs.version }}-alpine
           platforms: linux/amd64,linux/arm64
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - uses: actions/attest-build-provenance@v1
         if: ${{ github.event_name != 'pull_request' }}
