@@ -17,8 +17,12 @@ mv -f daemon/Dockerfile.new daemon/Dockerfile
 TIDEWAYS_PHP_VERSION="$(echo "$versions" |jq -r '.php.version')"
 awk \
 	-v "TIDEWAYS_PHP_VERSION=$TIDEWAYS_PHP_VERSION" \
+	-v "TIDEWAYS_PHP_SHA256_X64=$(curl -fsSL "https://tideways.s3.amazonaws.com/extension/${TIDEWAYS_PHP_VERSION}/tideways-php-${TIDEWAYS_PHP_VERSION}-x86_64.tar.gz" |sha256sum |cut -d' ' -f1)" \
+	-v "TIDEWAYS_PHP_SHA256_ARM64=$(curl -fsSL "https://tideways.s3.amazonaws.com/extension/${TIDEWAYS_PHP_VERSION}/tideways-php-${TIDEWAYS_PHP_VERSION}-arm64.tar.gz" |sha256sum |cut -d' ' -f1)" \
 	' \
 		$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{$3 = TIDEWAYS_PHP_VERSION}
+		$1 == "ENV" && $2 == "TIDEWAYS_PHP_SHA256_X64"{$3 = TIDEWAYS_PHP_SHA256_X64} \
+		$1 == "ENV" && $2 == "TIDEWAYS_PHP_SHA256_ARM64"{$3 = TIDEWAYS_PHP_SHA256_ARM64} \
 		{print} \
 	' \
 	< php/Dockerfile > php/Dockerfile.new
