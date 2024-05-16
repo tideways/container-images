@@ -12,7 +12,7 @@ RUN set -eux; \
 
 COPY tideways.asc /usr/share/keyrings/tideways.asc
 
-ENV TIDEWAYS_PHP_VERSION 5.8.4
+ENV TIDEWAYS_PHP_VERSION 5.9.0
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
