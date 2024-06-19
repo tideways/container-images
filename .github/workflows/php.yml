@@ -40,7 +40,7 @@ jobs:
         working-directory: ./${{ env.image }}/
         run: echo "version=$(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' Dockerfile)" >> $GITHUB_OUTPUT
 
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v6
         id: build
         with:
           context: ./${{ env.image }}/
@@ -79,7 +79,7 @@ jobs:
         working-directory: ./${{ env.image }}/
         run: echo "version=$(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' Dockerfile)" >> $GITHUB_OUTPUT
 
-      - uses: docker/build-push-action@v5
+      - uses: docker/build-push-action@v6
         id: build
         with:
           context: ./${{ env.image }}/alpine/
