@@ -22,6 +22,8 @@ jobs:
       with:
         fetch-depth: 0
     - uses: actions/setup-go@v5
+      with:
+        cache: false
     - name: Run update.sh.
       run: ./update.sh
     - name: Commit changes.
