@@ -1,0 +1,47 @@
+name: Update
+
+on:
+  push:
+    branches:
+    - main
+    paths:
+    - '.github/**'
+  schedule:
+  - cron: "0 11 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    name: Update Versions
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-go@v5
+    - name: Run update.sh.
+      run: ./update.sh
+    - name: Commit changes.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -x
+
+        go install github.com/planetscale/ghcommit@latest
+
+        if ! git diff --quiet daemon/Dockerfile; then
+          ghcommit -r ${{ github.repository }} \
+            -b main \
+            --add daemon/Dockerfile \
+            --message "Update to tideways-daemon $(awk '$1 == "ENV" && $2 == "TIDEWAYS_DAEMON_VERSION"{print $3}' daemon/Dockerfile)"
+        fi
+
+        if ! git diff --quiet php/Dockerfile; then
+          ghcommit -r ${{ github.repository }} \
+            -b main \
+            --add php/Dockerfile --add php/alpine/Dockerfile \
+            --message "Update to tideways-php $(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' php/Dockerfile)"
+        fi
