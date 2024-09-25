@@ -39,6 +39,7 @@ jobs:
             -b main \
             --add daemon/Dockerfile \
             --message "Update to tideways-daemon $(awk '$1 == "ENV" && $2 == "TIDEWAYS_DAEMON_VERSION"{print $3}' daemon/Dockerfile)"
+          git pull
         fi
 
         if ! git diff --quiet php/Dockerfile; then
@@ -46,4 +47,5 @@ jobs:
             -b main \
             --add php/Dockerfile --add php/alpine/Dockerfile \
             --message "Update to tideways-php $(awk '$1 == "ENV" && $2 == "TIDEWAYS_PHP_VERSION"{print $3}' php/Dockerfile)"
+          git pull
         fi
