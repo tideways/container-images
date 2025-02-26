@@ -21,6 +21,23 @@ awk \
 	< daemon/Dockerfile > daemon/Dockerfile.new
 mv -f daemon/Dockerfile.new daemon/Dockerfile
 
+TIDEWAYS_CLI_VERSION="$(echo "$versions" |jq -r '.cli.version')"
+awk \
+	-v TIDEWAYS_CLI_VERSION="$TIDEWAYS_CLI_VERSION" \
+	'
+		$1 == "ENV" { env=1 }
+		env {
+			for (i=1; i <= NF; i++) {
+				split($i, a, "=");
+				if (a[1] == "TIDEWAYS_CLI_VERSION") { $i = a[1] "=" TIDEWAYS_CLI_VERSION }
+			}
+		}
+		{ print }
+		env && !/\\$/ { env=0 }
+	' \
+	< cli/Dockerfile > cli/Dockerfile.new
+mv -f cli/Dockerfile.new cli/Dockerfile
+
 TIDEWAYS_PHP_VERSION="$(echo "$versions" |jq -r '.php.version')"
 awk \
 	-v "TIDEWAYS_PHP_VERSION=$TIDEWAYS_PHP_VERSION" \

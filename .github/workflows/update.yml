@@ -54,6 +54,26 @@ jobs:
           git pull --autostash
         fi
 
+        if ! git diff --quiet cli/Dockerfile; then
+          ghcommit -r ${{ github.repository }} \
+            -b main \
+            --add cli/Dockerfile \
+            --message "Update to tideways-cli $(awk '
+            $1 == "ENV" { env=1 }
+            env {
+              for (i=1; i <= NF; i++) {
+                split($i, a, "=");
+                if (a[1] == "TIDEWAYS_CLI_VERSION") {
+                  print a[2]
+                  exit
+                }
+              }
+            }
+            env && !/\\$/ { env=0 }
+          ' cli/Dockerfile)"
+          git pull --autostash
+        fi
+
         if ! git diff --quiet php/Dockerfile; then
           ghcommit -r ${{ github.repository }} \
             -b main \
