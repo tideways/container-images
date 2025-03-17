@@ -8,6 +8,7 @@ RUN set -eux; \
 	apt-get install -y --no-install-recommends \
 		bash-completion \
 		ca-certificates \
+		curl \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
