@@ -1,4 +1,4 @@
-FROM alpine:3.19
+FROM alpine:3.22
 
 LABEL org.opencontainers.image.source="https://github.com/tideways/container-images"
 
