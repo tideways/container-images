@@ -26,7 +26,7 @@ COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 
-ENV TIDEWAYS_CLI_VERSION=1.2.10
+ENV TIDEWAYS_CLI_VERSION=1.2.12
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
