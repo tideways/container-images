@@ -26,7 +26,7 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 COPY tideways.sources /etc/apt/sources.list.d/
 
-ENV TIDEWAYS_CLI_VERSION=1.2.10
+ENV TIDEWAYS_CLI_VERSION=1.2.12
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
