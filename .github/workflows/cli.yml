@@ -64,7 +64,7 @@ jobs:
           cache-from: type=gha,scope=${{ env.image }}
           cache-to: type=gha,scope=${{ env.image }},mode=max
 
-      - uses: actions/attest-build-provenance@v2
+      - uses: actions/attest-build-provenance@v3
         if: ${{ github.event_name != 'pull_request' }}
         id: attest
         with:
