@@ -20,7 +20,7 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 
 COPY tideways.sources /etc/apt/sources.list.d/
 
-ENV TIDEWAYS_DAEMON_VERSION=1.12.2
+ENV TIDEWAYS_DAEMON_VERSION=1.13.0
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
