@@ -55,7 +55,7 @@ jobs:
             env && !/\\$/ { env=0 }
           ' Dockerfile)" >> $GITHUB_OUTPUT
 
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         id: build
         with:
           context: ./${{ env.image }}/
@@ -107,7 +107,7 @@ jobs:
             env && !/\\$/ { env=0 }
           ' Dockerfile)" >> $GITHUB_OUTPUT
 
-      - uses: docker/build-push-action@v6
+      - uses: docker/build-push-action@v7
         id: build
         with:
           context: ./${{ env.image }}/alpine/
