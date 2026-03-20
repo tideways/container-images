@@ -4,9 +4,9 @@ LABEL org.opencontainers.image.source="https://github.com/tideways/container-ima
 
 COPY --chmod=0755 get-ext-path.php /tideways/
 
-ENV TIDEWAYS_PHP_VERSION=5.35.0
-ENV TIDEWAYS_PHP_SHA256_X64=1c111d1bcec00ecb8f678c4a5fc9d90c44dde8f2920c429ca09956e25b67ae29
-ENV TIDEWAYS_PHP_SHA256_ARM64=f91aaa453c89e83df1355a8336616046b8b77dcaaad0637e140a9cef610fce43
+ENV TIDEWAYS_PHP_VERSION=5.36.0
+ENV TIDEWAYS_PHP_SHA256_X64=04a97a7fff16deb681bb609dbbdc4a96d25d4e653618bf24281cd83c19aea69a
+ENV TIDEWAYS_PHP_SHA256_ARM64=1c3dfad9f2ede928e18ecf87731fb13e039955ac5571fccce8fc29b036f9b90e
 
 RUN set -eux; \
 	export DEBIAN_FRONTEND="noninteractive"; \
