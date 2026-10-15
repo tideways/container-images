@@ -4,9 +4,9 @@ LABEL org.opencontainers.image.source="https://github.com/tideways/container-ima
 
 COPY --chmod=0755 get-ext-path.php /tideways/
 
-ENV TIDEWAYS_PHP_VERSION=5.46.4
-ENV TIDEWAYS_PHP_SHA256_X64=d29c4e2f01a6917b36216215dedc544d0c685aa1ba6f0c046c88729477b89abc
-ENV TIDEWAYS_PHP_SHA256_ARM64=bb861f8542e1d953c156cdfe2a16db462e8b001e3d78c64b0990b4dab29acef6
+ENV TIDEWAYS_PHP_VERSION=5.47.0
+ENV TIDEWAYS_PHP_SHA256_X64=d221a75766330decfa5b516e8e46f5bcac0041f345e8e57dd8588c8877e0f55d
+ENV TIDEWAYS_PHP_SHA256_ARM64=51c95cd122032fba2a541bb7d0997c7acc1bfe3439d24bbdec525d835be3f92d
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
